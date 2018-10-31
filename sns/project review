@@ -1,0 +1,54 @@
+[FIRA] Big Data Engineering 4
+Creating SNS with MongoDB
+noSQL, (mongoDB)을 활용한 간단한 sns 구현 
+
+팀원 : 김동연, 김혜인
+
+
+1.	Introduction
+Virtual Box를 통해 사용하는 Linux 체제에서 MongoDB를 이용하여 Social Network Service를 구현하였다. 
+
+〮 첫 화면 : (1) Sign u3 (2) Sign in (3) Exit 
+
+〮 Newsfeed : Sign in을 한 후 newfeed를 user가 선택하면 자신의 글뿐만 아니라 follow한 사람들의 글을 모두 출력해서 볼 수 있다.
+
+〮 Wall : Sign in을 한 후 wall을 선택하면 자신의 담벼락으로 이동해 자신이 그동안 posting했던 글들과 comment를 볼 수 있다.
+
+〮 Post : Sign in을 한 후 post를 선택하면 새로운 글을 포스팅하거나 자신이 follow한 사람들의 글에 comment를 달거나, 자신의 글을 delete할 수 있다.
+
+〮 Follow : follow를 선택하면 해당 user를 follow하고, 그 follow의 리스트가 db에 저장된다. 
+여기서 기본 과제에서 추가된 사항으로는 내 친구가 많이 알지만, 내가 아직 follow하지 못한 사람들을 추천해주는 기능을 추가했다는 점이 있다.
+
+
+2.	Design and Implementation
+
+〮 코드 세부 사항
+(1) Newsfeed
+Mongo DB의 find 기능을 통해 following한 사람의 목록을 출력한 후 본인, 또는 그 리스트에 존재하는 사람들의 posts들을 posting db에서 찾아 출력한다.
+이 때, pagination을 이용하여 5글씩 출력한다. 출력할 때에는 while문을 사용하여 계속 page를 검색할 수 있게 구현하였다. 
+Newsfeed 함수는 로그인을 하여 계정 정보가 저장되는 db1, posting 정보가 저장되는 db2 그리고 user_id로 총 세 개의 인자를 받는다.
+
+(2) Postinterface, Insertpost, Deletepost
+Post.py에서는 newsfeed뿐만 아니라 posting과 관련한 여러 기능들을 함수를 통해 구현한다.
+postInterface 함수는 posting 정보가 저장되는 db와 user_id를 인자로 받으며, 
+세부 사항을 볼 수 있는 1)show detail, newsfeed를 저장하는 2) insert posting 등의 기능으로 구성되어 있다. 
+또한 insertPost 함수도 구현되어있는데, 새로 포스팅을 하면 db에 그 포스팅이 저장되게끔 구현하였다. 
+마지막으로 deletePost에서는 1.post, 2.review, 3.out의 세 개의 기능이 구현되어서 자신의 게시글, 자신의 댓글, 나가기 등의 기능이 구현되어있다. 
+
+(3) Wall.py에서는 getPost의 기능을 구현하였는데, getPost에서는 db와 user_id를 인자로 받는다. 
+getPost함수는 일단 자신이 쓴 게시글과 자신이 쓴 댓글을 모두 출력하고, 그 글들을 작성한 시간 순으로 sorting하여 보여준다. 
+그리고 pagination하여 5개씩 출력하여 원하는 페이지를 입력하면 그 페이지가 출력되게 구현하였다. 
+
+(4) Follow.py에서는 follow와 unfollow의 기능을 구현하였는데, follow에서는 follow하고 싶은 사람의 id를 받아서 그 사람을 자신의 follow 리스트에 저장한다.
+이렇게 follow를 한 사람의 포스트를 newsfeed에서 볼 수 있다. 
+Unfollow도 마찬가지로 unfollow하고 싶은 사람의 이름을 받아서 그 사람의 id를 받아 그 사람을 following하는 리스트에서 삭제한다. 
+그러면 그 사람의 글이 자신의 newsfeed에서 사라진다. 
+
+
+
+3.	Conclusion
+(2)	총평(Conclusion)
+전체적으로 처음부터 끝까지 하나의 SNS를 만들어보는 소중한 경험을 했다..
+또 발표를 통해서 친구들이 구현한 다른 기능도 인상적으로 볼 수 있어서 좋았다. 
+다음에 만약 비슷한 작업을 수행한다면 참고하여 더 나은 프로젝트를 수행할 수 있을 것 같아 좋았다.
+
